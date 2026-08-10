@@ -2,8 +2,8 @@ package org.example.helpdesk_backend.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.helpdesk_backend.dto.request.AuthRequest;
+import org.example.helpdesk_backend.dto.request.RegisterRequest;
 import org.example.helpdesk_backend.dto.response.AuthResponse;
-import org.example.helpdesk_backend.model.Role;
 import org.example.helpdesk_backend.model.User;
 import org.example.helpdesk_backend.repository.UserRepository;
 import org.example.helpdesk_backend.security.JwtUtil;
@@ -40,22 +40,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse register(AuthRequest request, Role role, String fullName) {
+    public AuthResponse register(RegisterRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new IllegalArgumentException("El correo ya está registrado.");
         }
 
         User user = User.builder()
-                .fullName(fullName)
+                .fullName(request.fullName())
                 .email(request.email())
                 .passwordHash(passwordEncoder.encode(request.password()))
-                .role(role)
+                .role(request.role())
                 .build();
 
         userRepository.save(user);
 
         String token = generateUserToken(user);
-
         return new AuthResponse(token, user.getEmail(), user.getRole().name());
     }
 

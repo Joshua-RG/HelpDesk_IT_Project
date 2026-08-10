@@ -5,12 +5,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.helpdesk_backend.dto.request.AuthRequest;
+import org.example.helpdesk_backend.dto.request.RegisterRequest;
 import org.example.helpdesk_backend.dto.response.AuthResponse;
-import org.example.helpdesk_backend.model.Role;
 import org.example.helpdesk_backend.service.AuthService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,12 +32,8 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Registra un nuevo usuario en el sistema")
-    public ResponseEntity<AuthResponse> register(
-            @Valid @RequestBody AuthRequest request,
-            @RequestParam String fullName,
-            @RequestParam Role role
-    ) {
-        AuthResponse response = authService.register(request, role, fullName);
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        AuthResponse response = authService.register(request);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -1,0 +1,72 @@
+### Registrar un Empleado Normal
+POST http://localhost:8080/api/auth/register?fullName=Juan Perez&role=EMPLOYEE
+Content-Type: application/json
+
+{
+  "email": "juan@empresa.com",
+  "password": "password123"
+}
+
+### Registrar un Técnico de Soporte (IT)
+POST http://localhost:8080/api/auth/register?fullName=Admin Sistemas&role=IT_SUPPORT
+Content-Type: application/json
+
+{
+  "email": "admin@empresa.com",
+  "password": "admin"
+}
+
+### Login como Empleado
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "juan@empresa.com",
+  "password": "password123"
+}
+
+> {%
+    client.global.set("employee_token", response.body.token);
+    client.log("Token de empleado guardado: " + client.global.get("employee_token"));
+%}
+
+### Login como Técnico IT
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@empresa.com",
+  "password": "admin"
+}
+
+> {%
+    client.global.set("it_token", response.body.token);
+    client.log("Token de IT guardado: " + client.global.get("it_token"));
+%}
+
+### Crear un Ticket (Como Empleado)
+POST http://localhost:8080/api/tickets
+Authorization: Bearer {{employee_token}}
+Content-Type: application/json
+
+{
+  "title": "No funciona mi impresora",
+  "description": "Sale un error de atasco de papel pero no hay papel atascado.",
+  "priority": "HIGH"
+}
+
+### Ver mis tickets (Como Empleado)
+GET http://localhost:8080/api/tickets?page=0&size=10
+Authorization: Bearer {{employee_token}}
+
+### Ver TODOS los tickets (Como Técnico IT)
+GET http://localhost:8080/api/tickets
+Authorization: Bearer {{it_token}}
+
+### Cambiar estado del ticket a IN_PROGRESS (Como Técnico IT)
+PUT http://localhost:8080/api/tickets/1/status?status=IN_PROGRESS
+Authorization: Bearer {{it_token}}
+
+### Empleado intenta cambiar el estado
+PUT http://localhost:8080/api/tickets/1/status?status=CLOSED
+Authorization: Bearer {{employee_token}}

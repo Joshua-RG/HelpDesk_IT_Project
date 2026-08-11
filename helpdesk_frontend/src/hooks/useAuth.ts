@@ -40,11 +40,10 @@ export function useAuth() {
     setIsLoading(true);
     setError(null);
     try {
-      // Forzamos el tipado con 'any' temporalmente para leer nuestra estructura
+
       const res = await authApi.login(payload) as any;
       
-      // Construimos el usuario con los datos reales del backend
-      const loggedUser = { email: res.email, role: res.role, username: res.email };
+      const loggedUser = { id: 0, email: res.email, role: res.role, username: res.email };
       persistAuth(res.token, loggedUser);
       
       return true;
@@ -62,7 +61,7 @@ export function useAuth() {
     try {
       const res = await authApi.register(payload) as any;
       
-      const newUser = { email: res.email, role: res.role, username: res.email };
+      const newUser = { id: 0, email: res.email, role: res.role, username: res.email };
       persistAuth(res.token, newUser);
       
       return true;

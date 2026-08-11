@@ -33,10 +33,10 @@ services:
     build:
       context: ./helpdesk_frontend
       args:
-        - VITE_API_URL=http://localhost:8080
+        - VITE_API_URL=http://74.249.99.138:8080
     container_name: helpdesk_frontend
     ports:
-      - "5173:80"
+      - "80:80"
     depends_on:
       - backend
 

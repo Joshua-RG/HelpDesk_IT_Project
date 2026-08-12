@@ -89,11 +89,11 @@ function buildColumns(
       cell: ({ row }) => <PriorityBadge priority={row.original.priority} />,
     },
     {
-      accessorKey: 'createdBy',
+      accessorKey: 'authorName',
       header: 'Reported by',
       cell: ({ row }) => (
         <span className="text-sm text-muted-foreground">
-          {row.original.createdBy?.username ?? '—'}
+          {row.original.authorName || '—'}
         </span>
       ),
     },

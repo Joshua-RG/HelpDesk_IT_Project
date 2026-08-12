@@ -22,8 +22,8 @@ export interface Ticket {
   description: string;
   status: TicketStatus;
   priority: TicketPriority;
-  createdBy: User;
-  assignedTo?: User;
+  authorName: string;
+  assigneeName: string;
   createdAt: string;
   updatedAt: string;
 }
